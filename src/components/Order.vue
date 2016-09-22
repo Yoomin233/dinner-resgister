@@ -58,13 +58,16 @@ export default {
 <style lang='less' scoped>
 div.main{
   color:#777;
+  > button {
+    color:#fff;
+  }
   > button.plus{
     border:none;
     cursor:pointer;
     display: block;
     margin:0 auto;
     padding:50px;
-    background-color: #52ec3f;
+    background-color: #9dea93;
     transition:all .3s ease;
     box-shadow:inset -2px -2px 0px 2px #31a204, inset 2px 2px 0px 2px #a8f6a3;
     font-size:4rem;
@@ -84,11 +87,16 @@ div.main{
   > button.cancel, button.reset{
     background-color: #eee;
     border:1px solid #aaa;
-    color:#777;
     cursor:pointer;
     padding:5px;
     margin:10px;
     border-radius:10px;
+  }
+  > button.cancel {
+    background-color: #d28787;
+  }
+  > button.reset {
+    background-color: #626bdb;
   }
   p.count{
     > span{
