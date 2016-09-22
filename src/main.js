@@ -18,6 +18,9 @@ router.map({
 	},
 	'table':{
 		component:table
+	},
+	'/':{
+		component:order
 	}
 })
 router.start(App, '#app')

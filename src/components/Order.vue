@@ -10,7 +10,7 @@
     p 和如下小伙伴共进晚餐吧！
     ul
       li(v-for='(index, item) in orderedList') {{item}}
-    p.count 共计: <span>{{orderedList?orderedList.length - 1:0}}</span>人
+    p.count 共计: <span>{{orderedList.length == 0?0:orderedList.length - 1}}</span>人
     p.footer author: <a href='https://github.com/YueminHu/'>yuemin.hu</a>, powered by <a href='https://vuejs.org/'>vue</a> and <a href='https://www.wilddog.com/dashboard/'>wilddog</a>
 </template>
 

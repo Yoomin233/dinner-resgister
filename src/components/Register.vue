@@ -2,11 +2,12 @@
   div.main 
     p 您的名字是？
     div.input
-      input(v-model='query', placeholder='键入任意字母以搜索！')
+      input(v-model='query', placeholder='键入任意字母！')
+    p 支持拼音以及首字母搜索
     ul
-      li(v-for='item in nameList|filterBy query in "name"', stagger='', @click='registerName($event, item)') 
+      li(v-for='item in nameList|filterBy query in "pinyinName" "shortName"', stagger='', @click='registerName($event, item)') 
         span {{item.chineseName}} 
-        span ({{item.name}})
+        span ({{item.RTXname}})
     p.footer author: <a href='https://github.com/YueminHu/'>yuemin.hu</a>, powered by <a href='https://vuejs.org/'>vue</a> and <a href='https://www.wilddog.com/dashboard/'>wilddog</a>
 </template>
 
@@ -74,7 +75,7 @@ div.main input{
 div.input{
   position: relative;
   background-color: #fff;
-  margin-bottom:40px;
+  margin-bottom:10px;
   z-index:1;
 }
 div.input::before, div.input::after{
