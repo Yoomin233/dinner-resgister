@@ -21,6 +21,3 @@ router.map({
 	}
 })
 router.start(App, '#app')
-if(localStorage.getItem('dinner-register-name')){
-	router.replace('/order')
-}

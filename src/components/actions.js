@@ -42,6 +42,9 @@ export const fetchOrderedList = ({state, dispatch}) => {
 			}
 		})
 	})
+	.catch( err => {
+		console.log(err);
+	})
 }
 export const addEater = ({state,dispatch}) => {
 	if(!state.ordered&&state.timeStr){

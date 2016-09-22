@@ -1,31 +1,53 @@
 <template lang='jade'>
 div.tableMain
+	p 加班餐预订
 	table
-		caption 加班餐预定
 		thead
 			tr
 				td 序号
 				td 日期
 				td 部门
-				td 姓名
-				td 签收(请写正楷)
+				td 姓名(请写正楷)
+				td 签收
 		tbody
 			tr(v-for='item in orderedList')
 				td {{$index}}
-				td {{todayStr}}
+				td {{shortStr}}
 				td 技术部
 				td {{item}}
 				td &nbsp;
 			tr(v-for='item in fillBlank' track-by='$index')
 				td {{$index + orderedList.length}}
-				td {{todayStr}}
+				td {{shortStr}}
+				td 技术部
+				td
+				td
+	table
+		thead
+			tr
+				td 序号
+				td 日期
+				td 部门
+				td 姓名(请写正楷)
+				td 签收
+		tbody
+			tr(v-for='item in 30' track-by='$index')
+				td {{$index + 30}}
+				td {{shortStr}}
 				td 技术部
 				td
 				td
 </template>
 <script>
 import store from './store.js'
+import {fetchOrderedList,updateName} from './actions.js'
+
 export default {
+	ready () {
+		this.updateName('孙晨');
+		// 拉取订餐数据到vuex中
+		this.fetchOrderedList();
+	},
 	data () {
 		return {
 
@@ -33,7 +55,11 @@ export default {
 	},
 	computed: {
 		fillBlank () {
-			return new Array(10);
+			var remained = 30 - this.orderedList.length;
+			return new Array(remained);
+		},
+		shortStr () {
+			return this.todayStr.match(/\d{4}\-(\d{2}\-\d{2})/)[1];
 		}
 	},
 	store,
@@ -41,27 +67,45 @@ export default {
 		getters:{
 			orderedList: state => state.orderedList,
 			todayStr: state => state.timeStr,
+		},
+		actions:{
+			fetchOrderedList,
+			updateName,
 		}
 	}
 }
 </script>
 <style scoped lang='less'>
+	body{
+		> div {
+			display: inline-block;
+		}
+	}
 	div.tableMain{
 		background-color: #fff;
 		color:#000;
+		display: inline-block;
+		> p {
+			font-size:2rem;
+			font-weight:bold;
+			text-align: center;
+			margin: 0 auto;
+		}
 	}
 	table{
+		display: inline-block;
 		border-collapse:collapse;
-		caption{
-			font-size:2rem;
+		thead{
+			font-weight:bold;
 		}
 		tbody, thead{
 			td{
+				font-size:0.8rem;
 				border: 1px solid black;
-				padding:5px 15px;
+				padding:7px 5px;
 				text-align: center;
 				&:last-child{
-					width:120px;
+					width:40px;
 				}
 			}
 		}
