@@ -20,7 +20,7 @@ import Vue from 'vue'
 import VueResource from 'vue-resource'
 Vue.use(VueResource)
 import store from './store.js'
-import {fetchOrderedList,updateName,addEater,delEater} from './actions.js'
+import {fetchOrderedList,updateName,addEater,delEater,fetchChatList} from './actions.js'
 export default {
   ready () {
     if(!localStorage.getItem('dinner-register-name')){
@@ -29,6 +29,7 @@ export default {
     this.updateName(localStorage.getItem('dinner-register-name'));
     // 拉取订餐数据到vuex中
     this.fetchOrderedList();
+    this.fetchChatList();
   },
   components: {
   }, 
@@ -44,7 +45,8 @@ export default {
       fetchOrderedList,
       updateName,
       addEater,
-      delEater
+      delEater,
+      fetchChatList
     },
     getters:{
       orderedList: state => state.orderedList,

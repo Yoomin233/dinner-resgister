@@ -8,6 +8,7 @@ const config = {
 };
 wilddog.initializeApp(config);
 var mainRef = wilddog.sync().ref('/orderRecords');
+var chatRef = wilddog.sync().ref('/chatRecords');
 export const updateName = ({dispatch}, name) => {
 	dispatch('updateName', name)
 }
@@ -41,10 +42,18 @@ export const fetchOrderedList = ({state, dispatch}) => {
 					dispatch('updateOrderStatus', data.indexOf(state.name) == -1?false:true);
 				}
 			}
-		})
+		});
 	})
 	.catch( err => {
 		console.log(err);
+	})
+}
+export const fetchChatList = ({state, dispatch}) => {
+	chatRef.on('value', (snapshot, error) => {
+		if (error == null){
+			var data = snapshot.val();
+
+		}
 	})
 }
 export const addEater = ({state,dispatch}) => {
