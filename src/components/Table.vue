@@ -19,8 +19,8 @@ div.tableMain
 			tr(v-for='item in fillBlank' track-by='$index')
 				td {{$index + orderedList.length}}
 				td {{shortStr}}
-				td 技术部
-				td
+				td &nbsp;
+				td &nbsp;
 				td
 	table
 		thead
@@ -34,8 +34,8 @@ div.tableMain
 			tr(v-for='item in 30' track-by='$index')
 				td {{$index + 30}}
 				td {{shortStr}}
-				td 技术部
-				td
+				td &nbsp;
+				td &nbsp;
 				td
 </template>
 <script>
@@ -95,6 +95,7 @@ export default {
 	table{
 		display: inline-block;
 		border-collapse:collapse;
+		vertical-align:bottom;
 		thead{
 			font-weight:bold;
 		}
@@ -104,6 +105,8 @@ export default {
 				border: 1px solid black;
 				padding:7px 5px;
 				text-align: center;
+				min-width:30px;
+				height:15px;
 				&:last-child{
 					width:40px;
 				}

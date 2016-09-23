@@ -62,9 +62,14 @@ const state = {
 		{RTXname:'jianjun.lin', pinyinName:'linjianjun', chineseName:'林建俊', shortName:'ljj'},
 		{RTXname:'chenxu.wu', pinyinName:'wuchenxu', chineseName:'吴晨旭', shortName:'wcx'},
 		{RTXname:'daiyun.zhou', pinyinName:'zhoudaiyun', chineseName:'周戴昀', shortName:'zdy'},
-		{RTXname:'mao.liu', pinyinName:'liumao', chineseName:'刘茂', shortName:'lm'}
+		{RTXname:'mao.liu', pinyinName:'liumao', chineseName:'刘茂', shortName:'lm'},
+		{RTXname:'wenbin.yu', pinyinName:'yuwenbin', chineseName:'虞文斌', shortName:'ywb'},
+		{RTXname:'qi.li', pinyinName:'liqi', chineseName:'李琦', shortName:'lq'},
+		{RTXname:'chao.sun', pinyinName:'synchao', chineseName:'孙超', shortName:'sc'},
+		{RTXname:'zongying.huang', pinyinName:'huangzongying', chineseName:'黄宗英', shortName:'hzy'}
     ],
     orderedList:[],
+    curTime:null,
     timeStr:null,
     ordered:false,
     name:null
@@ -76,6 +81,9 @@ const mutations = {
 	updateTimeStr (state, str){
 		state.timeStr = str
 	},
+	updateCurTime (state, time){
+		state.curTime = time
+	},
 	updateOrderStatus (state, status){
 		state.ordered = status
 	},
@@ -86,9 +94,11 @@ const mutations = {
 		state.orderedList.push(name);
 	},
 	delEater (state, name){
-		state.orderedList.splice(state.orderedList.findIndex(function(value){
-			return value == name;
-		}), 1);
+		state.orderedList.forEach((elem, index) => {
+			if (elem == name){
+				state.orderedList.splice(index, 1);
+			}
+		})
 	}
 }
 export default new Vuex.Store({

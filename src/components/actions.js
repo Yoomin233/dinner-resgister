@@ -18,6 +18,7 @@ export const fetchOrderedList = ({state, dispatch}) => {
 	getTimeStr()
 	.then((response) => {
         var d = new Date((response.data.zones[0]['timestamp'] - response.data.zones[0]['gmtOffset'])*1000);
+        dispatch('updateCurTime', d);
         var timeStr = (d.getFullYear()+'-'+(d.getMonth()+1<10?'0'+(d.getMonth()+1):''+(d.getMonth()+1))+'-'+(d.getDate()<10?'0'+d.getDate():''+d.getDate()));
         dispatch('updateTimeStr', timeStr);
         return timeStr;
@@ -48,6 +49,10 @@ export const fetchOrderedList = ({state, dispatch}) => {
 }
 export const addEater = ({state,dispatch}) => {
 	if(!state.ordered&&state.timeStr){
+		if(state.curTime.getHours()>=11&&state.curTime.getMinutes()>40){
+			alert('订餐时间已过, 请客官明天再来!');
+			return;
+		}
 		dispatch('addEater', state.name);
 		var todayRef = mainRef.child(state.timeStr);
 		todayRef.set(state.orderedList.join(','));

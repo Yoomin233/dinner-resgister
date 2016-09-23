@@ -5,11 +5,12 @@
     p(v-if='!ordered') &nbsp;
     p(v-if='ordered') 你已经成功订餐啦！
     button.plus(@click='addEater') +1
-    button.cancel(@click='delEater') cancel
+    button.cancel(@click='delEater' v-if='ordered') cancel
     button.reset(@click='resetUser') change user
     p 和如下小伙伴共进晚餐吧！
     ul
       li(v-for='(index, item) in orderedList') {{item}}
+        span(v-if='item == name') (我)
     p.count 共计: <span>{{orderedList.length == 0?0:orderedList.length - 1}}</span>人
     p.footer author: <a href='https://github.com/YueminHu/'>yuemin.hu</a>, powered by <a href='https://vuejs.org/'>vue</a> and <a href='https://www.wilddog.com/dashboard/'>wilddog</a>
 </template>
