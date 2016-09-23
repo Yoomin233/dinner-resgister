@@ -72,7 +72,8 @@ const state = {
     curTime:null,
     timeStr:null,
     ordered:false,
-    name:null
+    name:null,
+    chatRecords:null
 }
 const mutations = {
 	updateOrderedList (state, list){
@@ -99,6 +100,9 @@ const mutations = {
 				state.orderedList.splice(index, 1);
 			}
 		})
+	},
+	updateChatRecords (state, records){
+		state.chatRecords = records;
 	}
 }
 export default new Vuex.Store({

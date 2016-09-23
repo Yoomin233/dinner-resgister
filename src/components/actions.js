@@ -9,22 +9,28 @@ const config = {
 wilddog.initializeApp(config);
 var mainRef = wilddog.sync().ref('/orderRecords');
 var chatRef = wilddog.sync().ref('/chatRecords');
+// 先获取时间再进行下一步操作
+function getTimeStr(){
+	return Vue.http.jsonp('http://api.timezonedb.com/v2/list-time-zone?key=SNUAZCITLUBA&format=json&country=CN', {})
+}
+var timeStrPromise = new Promise(function(resolve, reject){
+	getTimeStr()
+	.then((response) => {
+	    var d = new Date((response.data.zones[0]['timestamp'] - response.data.zones[0]['gmtOffset'])*1000);
+	    var timeStr = (d.getFullYear()+'-'+(d.getMonth()+1<10?'0'+(d.getMonth()+1):''+(d.getMonth()+1))+'-'+(d.getDate()<10?'0'+d.getDate():''+d.getDate()));
+	    // debugger;
+	    resolve([timeStr, d]);
+	    });
+	})
 export const updateName = ({dispatch}, name) => {
 	dispatch('updateName', name)
 }
 export const fetchOrderedList = ({state, dispatch}) => {
-	function getTimeStr(){
-		return Vue.http.jsonp('http://api.timezonedb.com/v2/list-time-zone?key=SNUAZCITLUBA&format=json&country=CN', {})
-	}
-	getTimeStr()
-	.then((response) => {
-        var d = new Date((response.data.zones[0]['timestamp'] - response.data.zones[0]['gmtOffset'])*1000);
-        dispatch('updateCurTime', d);
-        var timeStr = (d.getFullYear()+'-'+(d.getMonth()+1<10?'0'+(d.getMonth()+1):''+(d.getMonth()+1))+'-'+(d.getDate()<10?'0'+d.getDate():''+d.getDate()));
-        dispatch('updateTimeStr', timeStr);
-        return timeStr;
-	})
-	.then((timeStr) => {
+	timeStrPromise.then((dataArr) => {
+		// debugger;
+		var timeStr = dataArr[0], curTime = dataArr[1];
+	    dispatch('updateCurTime', curTime);
+	    dispatch('updateTimeStr', timeStr);
 		// 野狗配置
 		var todayRef = mainRef.child(timeStr);
 		todayRef.on('value', (snapshot, error) => {
@@ -52,13 +58,25 @@ export const fetchChatList = ({state, dispatch}) => {
 	chatRef.on('value', (snapshot, error) => {
 		if (error == null){
 			var data = snapshot.val();
-
+			// debugger;
+			// 如果无数据则创建新节点
+			if (data == null){
+				timeStrPromise.then((timestr, d) => {
+		          let myObj = {};
+	              myObj[timeStr] = ''
+	              mainRef.update(myObj);
+				})
+			// 否则展示数据
+			}else{
+				dispatch('updateChatRecords', data);
+			}
 		}
 	})
 }
 export const addEater = ({state,dispatch}) => {
 	if(!state.ordered&&state.timeStr){
-		if(state.curTime.getHours()>=11&&state.curTime.getMinutes()>40){
+		console.log(state.curTime.getHours(), state.curTime.getMinutes())
+		if(state.curTime.getHours()>11||state.curTime.getHours()>=11&&state.curTime.getMinutes()>40){
 			alert('订餐时间已过, 请客官明天再来!');
 			return;
 		}
