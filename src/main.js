@@ -20,7 +20,7 @@ router.map({
 		component:order,
 		subRoutes: {
 			'/': {
-				component: chatRoom
+				component: orderedList
 			},
 			'/orderedList':{
 				component: orderedList

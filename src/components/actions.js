@@ -9,6 +9,7 @@ const config = {
 wilddog.initializeApp(config);
 var mainRef = wilddog.sync().ref('/orderRecords');
 var chatRef = wilddog.sync().ref('/chatRecords');
+var curTime = wilddog.sync().ServerValue.TIMESTAMP;
 // 先获取时间再进行下一步操作
 function getTimeStr(){
 	return Vue.http.jsonp('http://api.timezonedb.com/v2/list-time-zone?key=SNUAZCITLUBA&format=json&country=CN', {})
@@ -22,6 +23,12 @@ var timeStrPromise = new Promise(function(resolve, reject){
 	    resolve([timeStr, d]);
 	    });
 	})
+export const exportChatRef = ({state}) => {
+	return chatRef;
+}
+export const exportTimeStrPromise = () => {
+	return timeStrPromise;
+}
 export const updateName = ({dispatch}, name) => {
 	dispatch('updateName', name)
 }
@@ -54,7 +61,17 @@ export const fetchOrderedList = ({state, dispatch}) => {
 		console.log(err);
 	})
 }
-export const fetchChatList = ({state, dispatch}) => {
+export const fetchTodayChatList = ({state, dispatch}) => {
+	timeStrPromise.then((dataArr) => {
+		var timeStr = dataArr[0], curTime = dataArr[1];
+		if(!state.curTime||!state.timeStr){
+		    dispatch('updateCurTime', curTime);
+		    dispatch('updateTimeStr', timeStr);
+	    }
+	    // 创建今日聊天记录的ref
+	    var todayChatRef = chatRef.child(state.timeStr);
+	    return 
+	})
 	chatRef.on('value', (snapshot, error) => {
 		if (error == null){
 			var data = snapshot.val();
@@ -75,7 +92,6 @@ export const fetchChatList = ({state, dispatch}) => {
 }
 export const addEater = ({state,dispatch}) => {
 	if(!state.ordered&&state.timeStr){
-		console.log(state.curTime.getHours(), state.curTime.getMinutes())
 		if(state.curTime.getHours()>11||state.curTime.getHours()>=11&&state.curTime.getMinutes()>40){
 			alert('订餐时间已过, 请客官明天再来!');
 			return;

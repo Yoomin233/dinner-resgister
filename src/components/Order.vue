@@ -7,11 +7,12 @@
     button.plus(@click='addEater') +1
     button.cancel(@click='delEater' v-if='ordered') cancel
     button.reset(@click='resetUser') change user
-    p 和如下小伙伴共进晚餐吧！
-    ul
-      li(v-for='(index, item) in orderedList') {{item}}
-        span(v-if='item == name') (我)
-    p.count 共计: <span>{{orderedList.length == 0?0:orderedList.length - 1}}</span>人
+    div.componentSwitcher
+      a(v-link="{ path: '/order/orderedList', replace:true}") 订餐列表
+      // a(v-link="{ path: '/order/chatRoom', replace:true}") 一起聊天
+      // a(v-link="{ path: '/order/foodMenu', replace:true}") 今日菜谱
+    div.router-view
+      router-view(keep-alive)
     p.footer author: <a href='https://github.com/YueminHu/'>yuemin.hu</a>, powered by <a href='https://vuejs.org/'>vue</a> and <a href='https://www.wilddog.com/dashboard/'>wilddog</a>
 </template>
 
@@ -20,7 +21,7 @@ import Vue from 'vue'
 import VueResource from 'vue-resource'
 Vue.use(VueResource)
 import store from './store.js'
-import {fetchOrderedList,updateName,addEater,delEater,fetchChatList} from './actions.js'
+import {fetchOrderedList,updateName,addEater,delEater} from './actions.js'
 export default {
   ready () {
     if(!localStorage.getItem('dinner-register-name')){
@@ -29,7 +30,7 @@ export default {
     this.updateName(localStorage.getItem('dinner-register-name'));
     // 拉取订餐数据到vuex中
     this.fetchOrderedList();
-    this.fetchChatList();
+    // this.fetchChatList();
   },
   components: {
   }, 
@@ -45,8 +46,7 @@ export default {
       fetchOrderedList,
       updateName,
       addEater,
-      delEater,
-      fetchChatList
+      delEater
     },
     getters:{
       orderedList: state => state.orderedList,
@@ -100,6 +100,26 @@ div.main{
   }
   > button.reset {
     background-color: #626bdb;
+  }
+  > div.componentSwitcher{
+    color:#444;
+    display:flex;
+    padding:0 10%;
+    > a {
+      text-decoration: none;
+      width:100%;
+      display: inline-block;
+      text-align: center;
+      padding:10px;
+      transition:all .3s ease;
+      &:visited,link,hover,activated{
+        color:#777;
+      }
+      &.v-link-active{
+        color:#000;
+        background-color: rgba(0,0,0,0.1);
+      }
+    }
   }
   p.count{
     > span{
