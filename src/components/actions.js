@@ -45,8 +45,9 @@ export const fetchOrderedList = ({state, dispatch}) => {
 				var data = snapshot.val();
 				// 如果没有初始数据, 则创建新节点
 				if(data == null){
-		          let myObj = {};
-	              myObj[timeStr] = ''
+		          let myObj = {
+		          	[timeStr] : ''
+		          };
 	              mainRef.update(myObj);
 				}else{
 					// 更新已定餐列表
@@ -92,7 +93,7 @@ export const fetchTodayChatList = ({state, dispatch}) => {
 }
 export const addEater = ({state,dispatch}) => {
 	if(!state.ordered&&state.timeStr){
-		if(state.curTime.getHours()>11||state.curTime.getHours()>=11&&state.curTime.getMinutes()>40){
+		if(state.curTime.getHours()>11||(state.curTime.getHours()>=11&&state.curTime.getMinutes()>40)){
 			alert('订餐时间已过, 请客官明天再来!');
 			return;
 		}
