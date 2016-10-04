@@ -4,7 +4,7 @@ div.top
     ul
       li(v-for='(index, item) in orderedList') {{item}}
         span(v-if='item == name') (我)
-    p.count 共计: <span>{{orderedList.length == 0?0:orderedList.length - 1}}</span>人
+    p.count 共计: <span>{{orderedList.length == 0?0:orderedList.length}}</span>人
 </template>
 <script>
 export default {
