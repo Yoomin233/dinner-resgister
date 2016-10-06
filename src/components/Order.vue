@@ -7,7 +7,7 @@
         p 当前用户是:{{name}}
           span.switchUser(@click='resetUser') 更换用户
         p 推送通知
-          span.notificationSwitchContainer(@click.stop='switchIfNotification(!ifNotification)')
+          span.notificationSwitchContainer(@click.stop='switchStatus')
             span(v-bind:class='["notificationSwitchSlider", ifNotification?"sliderRight":""]')
             span(v-bind:class='["notificationSwitchFiller", ifNotification?"fillerGreen":""]')
     p 欢迎登录, {{name}}
@@ -23,6 +23,7 @@
     div.router-view
       router-view(keep-alive)
     p.footer author: <a href='https://github.com/YueminHu/'>yuemin.hu</a>, powered by <a href='https://vuejs.org/'>vue</a> and <a href='https://www.wilddog.com/dashboard/'>wilddog</a>
+    div.infoHelper(v-if='ifInfoHelper', transition='infoHelperToggle') {{info}}
 </template>
 
 <script>
@@ -34,7 +35,10 @@ import {fetchOrderedList,updateName,addEater,delEater,switchIfNotification} from
 export default {
   data () {
     return {
-      ifShowPanel:false
+      ifShowPanel:false,
+      ifInfoHelper:false,
+      info:'22',
+      infoHelperTimer:''
     }
   },
   ready () {
@@ -59,6 +63,19 @@ export default {
     },
     switchPanel () {
       this.ifShowPanel = !this.ifShowPanel;
+    },
+    switchStatus () {
+      this.switchIfNotification(!this.ifNotification);
+      this.ifInfoHelper = true;
+      if(this.ifNotification){
+        this.info = '通知推送已打开';
+      } else {
+        this.info = '通知推送已关闭';
+      }
+      if(this.infoHelperTimer)clearTimeout(this.infoHelperTimer);
+      this.infoHelperTimer = setTimeout(() => {
+        this.ifInfoHelper = false;
+      }, 1500)
     }
   },
   store,
@@ -85,6 +102,16 @@ export default {
 div.main{
   color:#777;
   position: relative;
+  > div.infoHelper {
+    text-shadow: none;
+    position: absolute;
+    left:50%;
+    top:70%;
+    transform:translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.6);
+    padding:15px;
+    color:#fff;
+  }
   > div.settings {
     position: absolute;
     right:30px;
@@ -104,7 +131,7 @@ div.main{
     span {
       display: inline-block;
       height:80%;
-      vertical-align: middle;
+      vertical-align: baseline;
       transition:all .3s ease;
     }
     span.switchUser {
@@ -159,6 +186,13 @@ div.main{
     opacity:0;
     transform:translate3d(-180px,0, 0);
   }
+  div.infoHelperToggle-transition{
+    transition:all .3s ease;
+    opacity:1;
+  }
+  div.infoHelperToggle-enter, div.infoHelperToggle-leave{
+    opacity:0;
+  }
   div.settingsIcon {
     position: absolute;
     right:0;
@@ -199,6 +233,9 @@ div.main{
   > button.plus:hover{
     transform:translate3d(-5px, -5px, 0);
     box-shadow:inset -2px -2px 0px 2px #31a204, inset 2px 2px 0px 2px #a8f6a3,5px 5px 15px 2px rgba(0, 0, 0, 0.2);
+  }
+  > button.plus:focus{
+    outline:none;
   }
   > button.plus:active{
     transform:translate3d(0, 0, 0);

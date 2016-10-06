@@ -43,8 +43,8 @@ var timeStrPromise = new Promise(function(resolve, reject){
 	    var d = new Date((response.data.zones[0]['timestamp'] - response.data.zones[0]['gmtOffset'])*1000);
 	    var timeStr = (d.getFullYear()+'-'+(d.getMonth()+1<10?'0'+(d.getMonth()+1):''+(d.getMonth()+1))+'-'+(d.getDate()<10?'0'+d.getDate():''+d.getDate()));
 	    // debugger;
-	    // GMT+8的11点对应UTC02点
-	    var elevenOclock = Date.parse(timeStr + 'T' + '02:00:00');
+	    // GMT+8的11点对应UTC03点
+	    var elevenOclock = Date.parse(timeStr + 'T' + '03:00:00');
 	    // 计算是否时候未到
 	    var toElevenDiff = elevenOclock - d;
 	    // if (true) {
@@ -97,9 +97,7 @@ export const fetchOrderedList = ({state, dispatch}) => {
 			}
 		});
 	})
-	.catch( err => {
-		console.log(err);
-	})
+	.catch( err => console.log(err))
 }
 export const fetchTodayChatList = ({state, dispatch}) => {
 	timeStrPromise.then((dataArr) => {
