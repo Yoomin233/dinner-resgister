@@ -11,13 +11,13 @@ div.tableMain
 				td 签收
 		tbody
 			tr(v-for='item in orderedList')
-				td {{$index}}
+				td {{$index + 1}}
 				td {{shortStr}}
 				td 技术部
 				td {{item}}
 				td &nbsp;
 			tr(v-for='item in fillBlank' track-by='$index')
-				td {{$index + orderedList.length}}
+				td {{$index + orderedList.length + 1}}
 				td {{shortStr}}
 				td &nbsp;
 				td &nbsp;
@@ -32,7 +32,7 @@ div.tableMain
 				td 签收
 		tbody
 			tr(v-for='item in 30' track-by='$index')
-				td {{$index + 30}}
+				td {{$index + 31}}
 				td {{shortStr}}
 				td &nbsp;
 				td &nbsp;

@@ -49,6 +49,7 @@ export const fetchOrderedList = ({state, dispatch}) => {
 		          	[timeStr] : ''
 		          };
 	              mainRef.update(myObj);
+	           		// return;
 				}else{
 					// 更新已定餐列表
 					dispatch('updateOrderedList',data.split(','));
@@ -62,35 +63,35 @@ export const fetchOrderedList = ({state, dispatch}) => {
 		console.log(err);
 	})
 }
-export const fetchTodayChatList = ({state, dispatch}) => {
-	timeStrPromise.then((dataArr) => {
-		var timeStr = dataArr[0], curTime = dataArr[1];
-		if(!state.curTime||!state.timeStr){
-		    dispatch('updateCurTime', curTime);
-		    dispatch('updateTimeStr', timeStr);
-	    }
-	    // 创建今日聊天记录的ref
-	    var todayChatRef = chatRef.child(state.timeStr);
-	    return 
-	})
-	chatRef.on('value', (snapshot, error) => {
-		if (error == null){
-			var data = snapshot.val();
-			// debugger;
-			// 如果无数据则创建新节点
-			if (data == null){
-				timeStrPromise.then((timestr, d) => {
-		          let myObj = {};
-	              myObj[timeStr] = ''
-	              mainRef.update(myObj);
-				})
-			// 否则展示数据
-			}else{
-				dispatch('updateChatRecords', data);
-			}
-		}
-	})
-}
+// export const fetchTodayChatList = ({state, dispatch}) => {
+// 	timeStrPromise.then((dataArr) => {
+// 		var timeStr = dataArr[0], curTime = dataArr[1];
+// 		if(!state.curTime||!state.timeStr){
+// 		    dispatch('updateCurTime', curTime);
+// 		    dispatch('updateTimeStr', timeStr);
+// 	    }
+// 	    // 创建今日聊天记录的ref
+// 	    var todayChatRef = chatRef.child(state.timeStr);
+// 	    return 
+// 	})
+// 	chatRef.on('value', (snapshot, error) => {
+// 		if (error == null){
+// 			var data = snapshot.val();
+// 			// debugger;
+// 			// 如果无数据则创建新节点
+// 			if (data == null){
+// 				timeStrPromise.then((timestr, d) => {
+// 		          let myObj = {};
+// 	              myObj[timeStr] = ''
+// 	              mainRef.update(myObj);
+// 				})
+// 			// 否则展示数据
+// 			}else{
+// 				dispatch('updateChatRecords', data);
+// 			}
+// 		}
+// 	})
+// }
 export const addEater = ({state,dispatch}) => {
 	if(!state.ordered&&state.timeStr){
 		if(state.curTime.getHours()>11||(state.curTime.getHours()>=11&&state.curTime.getMinutes()>40)){
