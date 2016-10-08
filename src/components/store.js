@@ -73,7 +73,8 @@ const state = {
     timeStr:null,
     ordered:false,
     name:null,
-    chatRecords:null
+    chatRecords:null,
+    ifNotification:false
 }
 const mutations = {
 	updateOrderedList (state, list){
@@ -95,14 +96,32 @@ const mutations = {
 		state.orderedList.push(name);
 	},
 	delEater (state, name){
-		state.orderedList.forEach((elem, index) => {
-			if (elem == name){
-				state.orderedList.splice(index, 1);
-			}
-		})
+		if (state.orderedList.length === 1){
+			state.orderedList = [];
+		} else {
+			state.orderedList.forEach((elem, index) => {
+				if (elem == name){
+					state.orderedList.splice(index, 1);
+				}
+			})
+		}
 	},
 	updateChatRecords (state, records){
 		state.chatRecords = records;
+	},
+	switchIfNotification (state, value) {
+		if (Notification.permission == 'granted'){
+			state.ifNotification = value;
+		} else {
+			Notification.requestPermission()
+			.then((permission) => {
+				if (permission == 'granted') {
+					state.ifNotification = value;
+				} else {
+					alert('请求被拒绝!');
+				}
+			})
+		}
 	}
 }
 export default new Vuex.Store({
