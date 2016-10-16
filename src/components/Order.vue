@@ -249,23 +249,35 @@ div.main{
     width:75%;
     background-color:#6b0;
     background-image: linear-gradient(to bottom, rgba(100, 100, 100, 0), rgba(100, 100, 100, 0.4) 100%);
-    background-size:100% 200%;
-    background-position: 0 0;
-    transition:background .3s ease;
     font-size:4em;
     color:#eee;
     font-weight:bold;
     border-radius:1em;
-    box-shadow:0 .12em .1em -.1em rgba(0, 0, 0, 0.6);
+    border:1px solid #659a26;
+    filter:drop-shadow(0 0em .05em rgba(0, 0, 0, 0.6));
     text-shadow:.05em .05em .15em rgba(0,  0, 0, 0.5);
+    position: relative;
+    &::before{
+      content:'';
+      border:.2em solid transparent;
+      border-top-color:inherit;
+      position: absolute;
+      bottom:0;
+      left:50%;
+      z-index:0;
+      transform:translate3d(-50%, 100%, 0);
+      transition:all .3s ease;
+    }
   }
   > button.plus:focus{
     outline:none;
   }
   > button.plus:active{
-    border:none;
     outline:none;
-    background-position: 0 100%;
+    &::before{
+     transform:translate3d(-50%, 200%, 0);
+     filter:blur(20px);
+    }
   }
   > button.cancel {
     border:1px solid #aaa;
@@ -285,11 +297,13 @@ div.main{
     text-shadow:none;
     background-color: #58a;
     padding:2em;
-    margin:1em 3em;
-    background:linear-gradient(-155deg, transparent 1.5em, #58a 0);
+    margin:2em 3em;
+    background:linear-gradient(to bottom, transparent 0, transparent 2.4em, rgba(0,0,0,0.1) 0, rgba(0,0,0,0.1) 4.8em, transparent 0, transparent 7.2em,  rgba(0,0,0,0.1) 0,  rgba(0,0,0,0.1) 9.6em),linear-gradient(-155deg, transparent 1.5em, #58a 0);
+/*     background-origin:content-box, padding-box; */
     position: relative;
     border-radius:.8em;
     box-shadow:0 .5em .5em -.5em black;
+    text-shadow:0 .05em .05em rgba(0, 0, 0, 0.7);
   }
   > div.order-list::before{
     content:'';
