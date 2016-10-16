@@ -14,13 +14,12 @@
         <img src="../assets/gear.png" alt="">
     p 欢迎登录, {{name}}
     button.plus(@click='addEater') +1
-    button.cancel(@click='delEater' v-if='ordered') cancel
     div.order-list
       p(v-if='ordered') 你已经成功订餐啦！
       p 和如下小伙伴共进晚餐吧！
       ul
         li(v-for='(index, item) in orderedList') {{item}}
-          span(v-if='item == name') (我)
+          button.cancel(@click='delEater' v-if='ordered&&item == name') cancel
       p.count 共计: <span>{{orderedList.length == 0?0:orderedList.length}}</span>人
     p.footer author: <a href='https://github.com/YueminHu/'>yuemin.hu</a>, powered by <a href='https://vuejs.org/'>vue</a> and <a href='https://www.wilddog.com/dashboard/'>wilddog</a>
 </template>
@@ -118,6 +117,11 @@ export default {
 div.main{
   color:#777;
   position: relative;
+  background:linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2) 100%);
+  li {
+    margin:.6em 0;
+    position: relative;
+  }
   > div.infoHelper {
     text-shadow: none;
     position: absolute;
@@ -136,6 +140,15 @@ div.main{
     height:45px;
     z-index:9999;
     text-shadow: none;
+  }
+  > div.settings + p {
+    display: inline-block;
+    background-color: darken(#58a,10%);
+    padding:.5em 1.5em;
+    color:#fff;
+    text-shadow:0 .05em .05em rgba(0, 0, 0, 0.3);
+    border-radius:.8em;
+    border-bottom-right-radius:0;
   }
   div.settingsPanel{
     z-index:1;
@@ -224,18 +237,12 @@ div.main{
     height:45px;
     cursor: pointer;
     overflow: hidden;
-/*     transition:all .3s;
- */    >img {
-      width:100%;
-      filter:drop-shadow(-45px 0px 0px rgba(0,0,0,0.6));
-      border-left:45px solid transparent;
+    transition:transform .3s;
+    &:hover{
+      animation:spinIcon 3s linear infinite;
     }
-  }
-  div.settingsIconActivated {
-    > img {
-      transform:rotate(30deg);
-      transform-origin:25% 50%;
-      filter:drop-shadow(-45px 0px 0px #6b0);
+    >img {
+      width:100%;
     }
   }
   > button {
@@ -245,7 +252,7 @@ div.main{
     border:none;
     cursor:pointer;
     display: block;
-    margin:.8em auto .2em;
+    margin:.2em auto .2em;
     width:75%;
     background-color:#6b0;
     background-image: linear-gradient(to bottom, rgba(100, 100, 100, 0), rgba(100, 100, 100, 0.4) 100%);
@@ -279,16 +286,7 @@ div.main{
      filter:blur(20px);
     }
   }
-  > button.cancel {
-    border:1px solid #aaa;
-    cursor:pointer;
-    padding:5px;
-    border-radius:.5em;
-    background-color: #c00;
-    position: absolute;
-    right:27px;
-    top:80px;
-  }
+
   > button.reset {
     background-color: #626bdb;
   }
@@ -304,6 +302,17 @@ div.main{
     border-radius:.8em;
     box-shadow:0 .5em .5em -.5em black;
     text-shadow:0 .05em .05em rgba(0, 0, 0, 0.7);
+    button.cancel {
+      color:#fff;
+      border:none;
+      cursor:pointer;
+      padding:5px;
+      border-radius:.3em;
+      background-color: #cb0;
+      position: absolute;
+      right:10%;
+      text-shadow:0 .05em .05em rgba(0, 0, 0, 0.4);
+    }
   }
   > div.order-list::before{
     content:'';
@@ -329,13 +338,18 @@ div.main{
     background: none;
   }
 }
+@keyframes spinIcon{
+ to {
+  transform:rotate(360deg);
+ }
+}
+a{
+  color:#999
+}
 </style>
 <style lang='less'>
     p.footer{
     color:#999;
     font-size:0.5rem;
-    }
-    a:link, a:visted, a:hover, a:active, a:-webkit-any-link{
-      color:#999!important;
     }
 </style>

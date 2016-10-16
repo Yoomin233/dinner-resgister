@@ -100,7 +100,7 @@ div.main input:focus{
 div.main li{
   list-style-type: none;
   cursor:pointer;
-  transition: all .3s ease;
+  transition: all .3s ease; 
 }
 div.main li:hover{
   background-color: rgba(255, 255, 255, 0.6);
