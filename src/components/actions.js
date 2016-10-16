@@ -132,7 +132,7 @@ export const addEater = ({state,dispatch}) => {
 	if(state.timeStr&&!state.ordered){
 		if(state.curTime.getHours()>11||(state.curTime.getHours()>=11&&state.curTime.getMinutes()>40)){
 			alert('订餐时间已过, 请客官明天再来!');
-			return;
+			// return;
 		}
 		dispatch('addEater', state.name);
 		var todayRef = mainRef.child(state.timeStr);
