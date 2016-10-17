@@ -1,29 +1,27 @@
 <template lang='jade'>
   div.main
+    div.settingsPanel(v-if='ifShowPanel' transition='expand' @click='switchPanel') 
+      p 当前用户是:{{name}}
+        span.switchUser(@click='resetUser') 更换用户
+      p 推送通知
+        span.notificationSwitchContainer(@click.stop='switchStatus')
+          span(v-bind:class='["notificationSwitchSlider", ifNotification?"sliderRight":""]')
+          span(v-bind:class='["notificationSwitchFiller", ifNotification?"fillerGreen":""]')
+      p 日期： {{todayStr}}
+      div.infoHelper(v-if='ifInfoHelper', transition='infoHelperToggle') {{info}}
     div.settings
       div(@click='switchPanel' v-bind:class='["settingsIcon", ifShowPanel?"settingsIconActivated":""]')
         <img src="../assets/gear.png" alt="">
-      div.settingsPanel(v-if='ifShowPanel' transition='expand' @click='switchPanel') 
-        p 当前用户是:{{name}}
-          span.switchUser(@click='resetUser') 更换用户
-        p 通知开关
-          span.notificationSwitchContainer(@click.stop='switchStatus')
-            span(v-bind:class='["notificationSwitchSlider", ifNotification?"sliderRight":""]')
-            span(v-bind:class='["notificationSwitchFiller", ifNotification?"fillerGreen":""]')
     p 欢迎登录, {{name}}
-    p 今天的日期是 {{todayStr}}
-    p(v-if='!ordered') &nbsp;
-    p(v-if='ordered') 你已经成功订餐啦！
     button.plus(@click='addEater') +1
-    button.cancel(@click='delEater' v-if='ordered') cancel
-    div.componentSwitcher
-      a(v-link="{ path: '/order/orderedList', replace:true}") 订餐列表
-      // a(v-link="{ path: '/order/chatRoom', replace:true}") 一起聊天
-      // a(v-link="{ path: '/order/foodMenu', replace:true}") 今日菜谱
-    div.router-view
-      router-view(keep-alive)
+    div.order-list
+      p(v-if='ordered') 你已经成功订餐啦！
+      p 和如下小伙伴共进晚餐吧！
+      ul
+        li(v-for='(index, item) in orderedList') {{item}}
+          button.cancel(@click='delEater' v-if='ordered&&item == name') cancel
+      p.count 共计: <span>{{orderedList.length == 0?0:orderedList.length}}</span>人
     p.footer author: <a href='https://github.com/YueminHu/'>yuemin.hu</a>, powered by <a href='https://vuejs.org/'>vue</a> and <a href='https://www.wilddog.com/dashboard/'>wilddog</a>
-    div.infoHelper(v-if='ifInfoHelper', transition='infoHelperToggle') {{info}}
 </template>
 
 <script>
@@ -63,6 +61,23 @@ export default {
     },
     switchPanel () {
       this.ifShowPanel = !this.ifShowPanel;
+      if(this.ifShowPanel == true){
+        setTimeout(()=>{
+          [...document.querySelectorAll('div.main > * ')].forEach((elem, index) => {
+            if([].indexOf.call(elem.classList, 'settingsPanel')){
+              elem.style.filter = 'blur(20px)';
+            }
+          }) 
+        }, 80)
+      }else{
+        setTimeout(()=>{
+          [...document.querySelectorAll('div.main > * ')].forEach((elem, index) => {
+            if([].indexOf.call(elem.classList, 'settingsPanel')){
+              elem.style.filter = '';
+            }
+          })
+        }, 80)
+      }
     },
     switchStatus () {
       this.switchIfNotification(!this.ifNotification);
@@ -102,6 +117,11 @@ export default {
 div.main{
   color:#777;
   position: relative;
+  background:linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2) 100%);
+  li {
+    margin:.6em 0;
+    position: relative;
+  }
   > div.infoHelper {
     text-shadow: none;
     position: absolute;
@@ -121,13 +141,27 @@ div.main{
     z-index:9999;
     text-shadow: none;
   }
+  > div.settings + p {
+    display: inline-block;
+    background-color: darken(#58a,10%);
+    padding:.5em 1.5em;
+    color:#fff;
+    text-shadow:0 .05em .05em rgba(0, 0, 0, 0.3);
+    border-radius:.8em;
+    border-bottom-right-radius:0;
+  }
   div.settingsPanel{
+    z-index:1;
     position: absolute;
-    width:500%;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
     background-color: rgba(0,0,0,0.6);
-    text-align: left;
+    text-align: center;
     padding:10px;
     color:#fff;
+    box-sizing:border-box;
     span {
       display: inline-block;
       height:80%;
@@ -159,6 +193,7 @@ div.main{
         background-color: #fff;
         border-radius:9px;
         z-index:2;
+        left:0;
       }
       span.notificationSwitchFiller{
         position: absolute;
@@ -173,18 +208,18 @@ div.main{
         transform:translate3d(20px, 0, 0);
       }
       span.fillerGreen{
-        background-color: lightgreen;
+        background-color: #6b0;
       }
     }
   }
   div.expand-transition{
-    transition:all .3s ease;
+    transition:all .3s cubic-bezier(0.25, 0.1, 0, 1.42);
     opacity:1;
-    transform:translate3d(-180px,45px, 0);
+    transform:translate3d(0px,0%, 0);
   }
   div.expand-enter, div.expand-leave{
     opacity:0;
-    transform:translate3d(-180px,0, 0);
+    transform:translate3d(0px,-100%, 0);
   }
   div.infoHelperToggle-transition{
     transition:all .3s ease;
@@ -202,15 +237,12 @@ div.main{
     height:45px;
     cursor: pointer;
     overflow: hidden;
+    transition:transform .3s;
+    &:hover{
+      animation:spinIcon 3s linear infinite;
+    }
     >img {
       width:100%;
-      filter:drop-shadow(-45px 0px 0px rgba(0,0,0,0.3));
-      border-left:45px solid transparent;
-    }
-  }
-  div.settingsIconActivated {
-    > img {
-      filter:drop-shadow(-45px 0px 0px rgba(215,53,53,0.8));
     }
   }
   > button {
@@ -220,65 +252,85 @@ div.main{
     border:none;
     cursor:pointer;
     display: block;
-    margin:0 auto;
-    padding:50px;
-    background-color: #9dea93;
-    transition:all .3s ease;
-    box-shadow:inset -2px -2px 0px 2px #31a204, inset 2px 2px 0px 2px #a8f6a3;
-    font-size:4rem;
+    margin:.2em auto .2em;
+    width:75%;
+    background-color:#6b0;
+    background-image: linear-gradient(to bottom, rgba(100, 100, 100, 0), rgba(100, 100, 100, 0.4) 100%);
+    font-size:4em;
     color:#eee;
     font-weight:bold;
-    border-radius:10%;
-  }
-  > button.plus:hover{
-    transform:translate3d(-5px, -5px, 0);
-    box-shadow:inset -2px -2px 0px 2px #31a204, inset 2px 2px 0px 2px #a8f6a3,5px 5px 15px 2px rgba(0, 0, 0, 0.2);
+    border-radius:1em;
+    border:1px solid #659a26;
+    filter:drop-shadow(0 0em .05em rgba(0, 0, 0, 0.6));
+    text-shadow:.05em .05em .15em rgba(0,  0, 0, 0.5);
+    position: relative;
+    &::before{
+      content:'';
+      border:.2em solid transparent;
+      border-top-color:inherit;
+      position: absolute;
+      bottom:0;
+      left:50%;
+      z-index:0;
+      transform:translate3d(-50%, 100%, 0);
+      transition:all .3s ease;
+    }
   }
   > button.plus:focus{
     outline:none;
   }
   > button.plus:active{
-    transform:translate3d(0, 0, 0);
-    border:none;
     outline:none;
+    &::before{
+     transform:translate3d(-50%, 200%, 0);
+     filter:blur(20px);
+    }
   }
-  > button.cancel, button.reset{
-    background-color: #eee;
-    border:1px solid #aaa;
-    cursor:pointer;
-    padding:5px;
-    margin:10px;
-    border-radius:10px;
-  }
-  > button.cancel {
-    background-color: #d28787;
-  }
+
   > button.reset {
     background-color: #626bdb;
   }
-  > div.componentSwitcher{
-    color:#444;
-    display:flex;
-    padding:0 10%;
-    > a {
-      text-decoration: none;
-      width:100%;
-      display: inline-block;
-      text-align: center;
-      padding:10px;
-      transition:all .3s ease;
-      &:visited,link,hover,activated{
-        color:#777;
-      }
-      &.v-link-active{
-        color:#000;
-        background-color: rgba(0,0,0,0.1);
-      }
+  > div.order-list{
+    color:#fff;
+    text-shadow:none;
+    background-color: #58a;
+    padding:2em;
+    margin:2em 3em;
+    background:linear-gradient(to bottom, transparent 0, transparent 2.4em, rgba(0,0,0,0.4) 2.5em, rgba(0,0,0,0.1) 0, rgba(0,0,0,0.1) 4.8em, transparent 0, transparent 7.2em,  rgba(0,0,0,0.4) 7.3em, rgba(0,0,0,0.1) 0,  rgba(0,0,0,0.1) 9.6em),linear-gradient(-155deg, transparent 1.5em, #58a 0);
+/*     background-origin:content-box, padding-box; */
+    position: relative;
+    border-radius:.8em;
+    box-shadow:0 .5em .5em -.5em black;
+    text-shadow:0 .05em .05em rgba(0, 0, 0, 0.7);
+    button.cancel {
+      color:#fff;
+      border:none;
+      cursor:pointer;
+      padding:5px;
+      border-radius:.3em;
+      background-color: #cb0;
+      position: absolute;
+      right:10%;
+      text-shadow:0 .05em .05em rgba(0, 0, 0, 0.4);
     }
   }
+  > div.order-list::before{
+    content:'';
+    position: absolute;
+    right:0;
+    top:-2em;
+    width:3.5em;
+    height:2em;
+    background: linear-gradient(to bottom right, transparent 50%, rgba(0, 0, 0, 0.1) 0, rgba(0, 0, 0, 0.4) 100%);
+    transform-origin:left bottom;
+    transform:rotate(55deg);
+    border-bottom-right-radius:inherit;
+    box-shadow:.3em .3em .3em -.1em rgba(0, 0, 0, 0.15);
+  }
+
   p.count{
     > span{
-      color:red;
+      color:#cb0;
       font-weight: bold;
     }
   }
@@ -286,13 +338,18 @@ div.main{
     background: none;
   }
 }
+@keyframes spinIcon{
+ to {
+  transform:rotate(360deg);
+ }
+}
+a{
+  color:#999
+}
 </style>
 <style lang='less'>
     p.footer{
     color:#999;
     font-size:0.5rem;
-    }
-    a:link, a:visted, a:hover, a:active{
-      color:#999;
     }
 </style>
