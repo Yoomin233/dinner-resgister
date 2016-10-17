@@ -13,7 +13,8 @@ var chatRef = wilddog.sync().ref('/chatRecords');
 var curTime = wilddog.sync().ServerValue.TIMESTAMP;
 // 推送通知的函数
 function showNotification () {
-	if(store.state.ifNotification) {
+	// 只有打开通知推送开关且没有订餐时才弹出通知
+	if(store.state.ifNotification&&!store.state.ordered) {
 		var notification = new Notification("来自订餐系统的通知:", {
 			body: '订餐时间到啦！想要订餐的童鞋可以直接点击该通知来订餐了!',
 			tag:'dinner=order',
@@ -50,6 +51,8 @@ var timeStrPromise = new Promise(function(resolve, reject){
 	    // if (true) {
 	    // 	setTimeout(showNotification, 3000);
 	    // }
+	    // debugger;
+	    console.log(`到11点还差:${toElevenDiff}`);
 	    if(toElevenDiff > 0) {
 	    	setTimeout(showNotification, toElevenDiff);
 	    }

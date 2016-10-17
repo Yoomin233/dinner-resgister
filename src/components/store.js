@@ -66,7 +66,8 @@ const state = {
 		{RTXname:'wenbin.yu', pinyinName:'yuwenbin', chineseName:'虞文斌', shortName:'ywb'},
 		{RTXname:'qi.li', pinyinName:'liqi', chineseName:'李琦', shortName:'lq'},
 		{RTXname:'chao.sun', pinyinName:'synchao', chineseName:'孙超', shortName:'sc'},
-		{RTXname:'zongying.huang', pinyinName:'huangzongying', chineseName:'黄宗英', shortName:'hzy'}
+		{RTXname:'zongying.huang', pinyinName:'huangzongying', chineseName:'黄宗英', shortName:'hzy'},
+		{RTXname:'xiaojing.shen', pinyinName:'shenxiaojing', chineseName:'申小静', shortName:'sxj'}
     ],
     orderedList:[],
     curTime:null,

@@ -6,7 +6,7 @@
       div.settingsPanel(v-if='ifShowPanel' transition='expand' @click='switchPanel') 
         p 当前用户是:{{name}}
           span.switchUser(@click='resetUser') 更换用户
-        p 推送通知
+        p 通知开关
           span.notificationSwitchContainer(@click.stop='switchStatus')
             span(v-bind:class='["notificationSwitchSlider", ifNotification?"sliderRight":""]')
             span(v-bind:class='["notificationSwitchFiller", ifNotification?"fillerGreen":""]')
