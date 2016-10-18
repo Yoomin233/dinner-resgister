@@ -296,7 +296,7 @@ div.main{
     background-color: #58a;
     padding:2em;
     margin:2em 3em;
-    background:linear-gradient(to bottom, transparent 0, transparent 2.4em, rgba(0,0,0,0.4) 2.5em, rgba(0,0,0,0.1) 0, rgba(0,0,0,0.1) 4.8em, transparent 0, transparent 7.2em,  rgba(0,0,0,0.4) 7.3em, rgba(0,0,0,0.1) 0,  rgba(0,0,0,0.1) 9.6em),linear-gradient(-155deg, transparent 1.5em, #58a 0);
+    background:linear-gradient(to bottom, transparent 0, transparent 2.4em, rgba(0,0,0,0.4) 2.5em, rgba(0,0,0,0.1) 0, rgba(0,0,0,0.1) 4.8em, rgba(255,255,255,0.3) 4.9em, transparent 0, transparent 7.2em,  rgba(0,0,0,0.4) 7.3em, rgba(0,0,0,0.1) 0,  rgba(0,0,0,0.1) 9.6em),linear-gradient(-155deg, transparent 1.5em, #58a 0);
 /*     background-origin:content-box, padding-box; */
     position: relative;
     border-radius:.8em;
